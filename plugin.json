@@ -1,0 +1,19 @@
+{
+  "name": "design-system",
+  "version": "1.0.0",
+  "description": "Design system for building consistent, accessible UI components with shadcn/ui, Tailwind CSS, and semantic tokens",
+  "author": "Design System Team",
+  "repository": "https://github.com/example/design-system-plugin",
+  "skills": {
+    "auto_discover": true,
+    "dir": "skills"
+  },
+  "agents": {
+    "auto_discover": true,
+    "dir": "agents"
+  },
+  "hooks": {
+    "auto_discover": true,
+    "dir": "hooks"
+  }
+}
