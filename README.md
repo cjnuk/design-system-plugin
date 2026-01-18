@@ -1,127 +1,100 @@
 # Design System Plugin for Claude Code
 
-A comprehensive Claude Code plugin that provides slash commands, agents, and hooks for building UI components following design system best practices.
+A context-efficient Claude Code plugin for building UI components with shadcn/ui, semantic tokens, and WCAG accessibility.
 
-## Features
+## Architecture
 
-- **8 Skills (Slash Commands)**: Quick access to design system guidance
-- **1 Agent**: Deep component generation with full context
-- **1 Hook**: Automated validation of generated code
-- **Knowledge Base**: Full design system documentation
+This plugin uses an **agent-centric architecture** to minimize main context consumption:
+
+- **Thin Skills** (~25 lines): Trigger detection + agent dispatch only
+- **Specialized Agents** (~60-100 lines): Load knowledge on-demand in isolated context
+- **Knowledge Base** (~14k lines): Design system docs loaded by agents as needed
+
+### Context Efficiency
+
+| Architecture | Main Context Load |
+|--------------|-------------------|
+| Traditional (embedded skills) | ~300 lines per command |
+| Agent-centric (this plugin) | ~25 lines per command |
+
+**Result:** ~90% reduction in main session context usage.
 
 ## Installation
 
-### Option 1: Clone as a Plugin
+```bash
+# Clone into Claude Code plugins directory
+git clone https://github.com/cjnuk/design-system-plugin ~/.claude/plugins/design-system
+```
+
+Or symlink an existing clone:
 
 ```bash
-# Clone the plugin into your Claude Code plugins directory
-git clone https://github.com/your-org/design-system-plugin ~/.claude/plugins/design-system
+ln -s /path/to/design-system-plugin ~/.claude/plugins/design-system
 ```
 
-### Option 2: Symlink Existing Repo
+## Available Commands
 
-```bash
-# If you already have the design system repo
-ln -s /path/to/design-systems/design-system-plugin ~/.claude/plugins/design-system
-```
+| Command | Purpose | Agent |
+|---------|---------|-------|
+| `/ds-setup` | Initialize project with design system | setup-agent |
+| `/ds-component [name]` | Generate component with cva, types, a11y | component-agent |
+| `/ds-form-field [name]` | Add form field with Zod validation | form-agent |
+| `/ds-accessibility` | Fix WCAG 2.1 AA violations | accessibility-agent |
+| `/ds-dark-mode` | Implement dark mode theming | theming-agent |
+| `/ds-tokens` | Design token reference and guidance | theming-agent |
+| `/ds-review` | Review code against design system | review-agent |
+| `/ds-migrate` | Migrate from MUI/Chakra/Bootstrap | migration-agent |
+| `/design-system` | Intelligent routing for complex requests | router-agent |
 
-### Option 3: Project-Local Installation
+## How It Works
 
-```bash
-# Add to a specific project
-mkdir -p .claude/plugins
-cp -r /path/to/design-system-plugin .claude/plugins/design-system
-```
+1. **You invoke a skill** (e.g., `/ds-component Badge`)
+2. **Thin skill dispatches to agent** (component-agent)
+3. **Agent loads knowledge on-demand** via Read tool:
+   - `knowledge/PROMPTS/01-NEW-COMPONENT.md`
+   - `knowledge/LAYER-01-DESIGN-TOKENS.md`
+   - `knowledge/LAYER-02-COMPONENTS.md`
+4. **Agent executes in isolated context** - main session stays clean
+5. **Agent returns result** - only the output reaches your session
 
-## Available Skills
-
-| Command | Description |
-|---------|-------------|
-| `/ds-setup` | Initialize a project with design system tokens and shadcn/ui |
-| `/ds-component [name]` | Generate a new component following all patterns |
-| `/ds-form-field [name]` | Add a form field with validation |
-| `/ds-accessibility` | Fix accessibility issues |
-| `/ds-dark-mode` | Implement dark mode |
-| `/ds-review` | Review code against design system standards |
-| `/ds-tokens` | Quick reference for design tokens |
-| `/ds-migrate` | Migrate from MUI/Chakra/Bootstrap |
-
-## Usage Examples
-
-### Setup a New Project
+## Directory Structure
 
 ```
-/ds-setup
+design-system-plugin/
+├── plugin.json
+├── skills/                    # THIN ROUTERS (~25 lines each)
+│   ├── design-system.md       # Master router
+│   ├── setup.md
+│   ├── component.md
+│   ├── form-field.md
+│   ├── accessibility.md
+│   ├── dark-mode.md
+│   ├── review.md
+│   ├── tokens.md
+│   └── migrate.md
+├── agents/                    # SPECIALIZED AGENTS (load knowledge on-demand)
+│   ├── router-agent.md        # Intelligent routing
+│   ├── setup-agent.md
+│   ├── component-agent.md
+│   ├── form-agent.md
+│   ├── accessibility-agent.md
+│   ├── theming-agent.md
+│   ├── review-agent.md
+│   └── migration-agent.md
+├── hooks/
+│   └── validate-output.md     # PostToolUse validation
+└── knowledge/                 # Design system documentation
+    ├── LLM-AGENT-GUIDE.md     # Task routing paths
+    ├── LAYER-01-DESIGN-TOKENS.md
+    ├── LAYER-02-COMPONENTS.md
+    ├── LAYER-08-ACCESSIBILITY.md
+    ├── PROMPTS/               # Task templates
+    └── ...
 ```
-
-This will guide you through:
-1. Installing dependencies (cva, clsx, tailwind-merge)
-2. Configuring Tailwind with semantic tokens
-3. Setting up shadcn/ui
-4. Creating the `cn()` utility
-
-### Generate a Component
-
-```
-/ds-component Badge
-```
-
-Creates a Badge component with:
-- cva variant definitions
-- TypeScript props interface
-- Semantic tokens
-- Accessibility attributes
-
-### Add a Form Field
-
-```
-/ds-form-field email
-```
-
-Generates:
-- Zod validation schema
-- react-hook-form integration
-- Accessible FormField component
-- Error message handling
-
-### Review Code
-
-```
-/ds-review
-```
-
-Checks code for:
-- Hardcoded colors (should use semantic tokens)
-- Missing accessibility attributes
-- Improper TypeScript types
-- Component pattern violations
-
-## Agent: Component Builder
-
-For complex components, use the component-builder agent:
-
-```
-Create a complex DataTable component with sorting, filtering,
-and pagination. Should follow the design system patterns.
-```
-
-The agent will:
-1. Analyze requirements
-2. Check existing patterns in your codebase
-3. Generate the component with proper structure
-4. Create tests with jest-axe
-5. Validate against all rules
-
-## Output Validation Hook
-
-The `validate-output` hook automatically checks generated `.tsx` and `.jsx` files for:
-
-- Hardcoded colors → suggests semantic tokens
-- Clickable divs → suggests buttons
-- Missing aria-labels → warns about accessibility
-- Any types → requires proper TypeScript
 
 ## Design System Principles
+
+All agents enforce these mandatory rules:
 
 ### 1. Semantic Tokens Only
 
@@ -140,58 +113,23 @@ className="bg-primary text-primary-foreground"
 className={`btn ${isPrimary ? 'bg-blue-500' : 'bg-gray-500'}`}
 
 // ALWAYS
-const variants = cva("base", { variants: { variant: { primary: "...", secondary: "..." } } })
-className={cn(variants({ variant }))}
+const variants = cva("base", { variants: { ... } })
 ```
 
-### 3. Accessibility First
+### 3. TypeScript Types
 
 ```typescript
-// NEVER
-<div onClick={handleClick}>Click me</div>
-<button><X /></button>
+// ALWAYS export interface with VariantProps
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {}
+```
 
-// ALWAYS
-<button type="button" onClick={handleClick}>Click me</button>
+### 4. Accessibility
+
+```typescript
+// ALWAYS for icon-only buttons
 <button aria-label="Close"><X /></button>
-```
-
-### 4. TypeScript Types
-
-```typescript
-// NEVER
-function Component(props: any) {}
-
-// ALWAYS
-export interface ComponentProps extends VariantProps<typeof componentVariants> {
-  title: string
-}
-```
-
-## Directory Structure
-
-```
-design-system-plugin/
-├── plugin.json              # Plugin manifest
-├── README.md                # This file
-├── skills/                  # Slash commands
-│   ├── setup.md            # /ds-setup
-│   ├── component.md        # /ds-component
-│   ├── form-field.md       # /ds-form-field
-│   ├── accessibility.md    # /ds-accessibility
-│   ├── dark-mode.md        # /ds-dark-mode
-│   ├── review.md           # /ds-review
-│   ├── tokens.md           # /ds-tokens
-│   └── migrate.md          # /ds-migrate
-├── agents/
-│   └── component-builder.md # Deep component generation
-├── hooks/
-│   └── validate-output.md   # Post-write validation
-└── knowledge/              # Symlink to system/ docs
-    ├── LLM-AGENT-GUIDE.md
-    ├── LAYER-01-DESIGN-TOKENS.md
-    ├── LAYER-02-COMPONENTS.md
-    └── ...
 ```
 
 ## Token Quick Reference
@@ -203,13 +141,6 @@ design-system-plugin/
 | `text-foreground` | Slate 900 | Slate 50 | Body text |
 | `text-muted-foreground` | Slate 500 | Slate 400 | Secondary text |
 | `border-border` | Slate 200 | Slate 700 | Borders |
-
-## Contributing
-
-1. Follow the existing skill/agent patterns
-2. Test all changes with `/ds-review`
-3. Ensure accessibility compliance
-4. Update this README for new features
 
 ## License
 
