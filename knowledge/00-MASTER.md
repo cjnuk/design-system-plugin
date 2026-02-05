@@ -1,16 +1,16 @@
 ---
 title: "AI Design System: Master Document"
-version: "2.1"
+version: "2.2"
 audience: ["all"]
 dependencies: []
-last_updated: "2026-01-18"
+last_updated: "2026-02-04"
 ---
 
 # AI Design System: Master Document
 
-**Version:** 2.1  
-**Status:** Production-Ready  
-**Last Updated:** January 2026  
+**Version:** 2.2
+**Status:** Production-Ready
+**Last Updated:** February 2026  
 **Primary Audience:** AI/LLM agents and the teams maintaining them
 
 ---
@@ -146,7 +146,14 @@ These patterns apply to both marketing and application domains.
 | [LAYER-06-STATE-MANAGEMENT.md](./LAYER-06-STATE-MANAGEMENT.md) | How components and apps manage state; Jotai, Server Components | Developers | 20 min |
 | [LAYER-07-INTERACTION-PATTERNS.md](./LAYER-07-INTERACTION-PATTERNS.md) | Loading states, error states, success states, timing, animations | Designers, Developers | 20 min |
 | [LAYER-07b-PROMPT-PATTERNS.md](./LAYER-07b-PROMPT-PATTERNS.md) | Prompt UI patterns, suggestions, regeneration | Designers, Developers, LLMs | 15 min |
+| [LAYER-07c-MOTION-PATTERNS.md](./LAYER-07c-MOTION-PATTERNS.md) | Comprehensive motion design: micro-interactions, transitions, springs | Designers, Developers | 20 min |
 | [LAYER-08-ACCESSIBILITY.md](./LAYER-08-ACCESSIBILITY.md) | WCAG AA standards, color contrast, keyboard navigation, ARIA attributes | Everyone | 25 min |
+
+### 🔧 TOOLING/ (Development Setup)
+
+| File | Purpose | Audience | Read Time |
+|------|---------|----------|-----------|
+| [LAYER-10-TOOLING-CONFIG.md](./LAYER-10-TOOLING-CONFIG.md) | ESLint, Prettier, TypeScript, Tailwind, VS Code configuration | Developers | 15 min |
 
 ### 🌐 MARKETING-DOMAIN/
 Tailwind UI templates for marketing sites.

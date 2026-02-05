@@ -12,15 +12,16 @@
 1. [Standards Overview](#standards-overview)
 2. [Color Contrast](#color-contrast)
 3. [Keyboard Navigation](#keyboard-navigation)
-4. [ARIA Attributes](#aria-attributes)
-5. [Semantic HTML](#semantic-html)
-6. [Focus Management](#focus-management)
-7. [Reduced Motion](#reduced-motion)
-8. [Screen Readers](#screen-readers)
-9. [Testing](#testing)
-10. [Quick Checklist](#quick-checklist)
-11. [Tools & Resources](#tools--resources)
-12. [Summary](#summary)
+4. [Touch Targets](#touch-targets)
+5. [ARIA Attributes](#aria-attributes)
+6. [Semantic HTML](#semantic-html)
+7. [Focus Management](#focus-management)
+8. [Reduced Motion](#reduced-motion)
+9. [Screen Readers](#screen-readers)
+10. [Testing](#testing)
+11. [Quick Checklist](#quick-checklist)
+12. [Tools & Resources](#tools--resources)
+13. [Summary](#summary)
 
 ---
 
@@ -74,6 +75,27 @@ We target **WCAG 2.1 Level AA** as our accessibility standard.
   Click me
 </button>
 ```
+
+### ADVANCED CONTRAST: APCA
+
+WCAG 2 contrast ratios can be imprecise for real-world perception. APCA provides
+better guidance, especially for:
+- Large text (where WCAG 2 is overly strict)
+- Light-on-dark text (where WCAG 2 is too lenient)
+
+#### APCA Minimum Thresholds
+
+| Content Type | APCA Lc Value |
+|--------------|---------------|
+| Body text (16px) | Lc 75+ |
+| Large text (24px+) | Lc 60+ |
+| UI components | Lc 45+ |
+| Non-essential decorative | Lc 30+ |
+
+#### APCA Tool
+- Polaris APCA Contrast Calculator: https://www.myndex.com/APCA/
+
+**LLM usage rule:** Default to WCAG 2 ratios for compliance. Use APCA values when optimizing dark mode interfaces or when WCAG 2 produces visually suboptimal results.
 
 ### Tools
 
@@ -141,6 +163,35 @@ Implement essential keyboard shortcuts.
 - Escape: Close modal/dialog
 - Arrow keys: Navigate lists/menus
 ```
+
+---
+
+## TOUCH TARGETS
+
+### Minimum Sizes
+
+| Platform | Minimum Size | Recommended |
+|----------|--------------|-------------|
+| Desktop | 24px x 24px | 32px x 32px |
+| Mobile | 44px x 44px | 48px x 48px |
+| With spacing | 24px target + 8px padding | Ensures 44px+ hit area |
+
+### Implementation
+
+```tsx
+// Icon button with proper touch target
+<button className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center">
+  <Icon className="h-6 w-6" />
+</button>
+
+// Link with adequate spacing
+<a href="/page" className="inline-block py-2 px-3 min-h-[44px]">
+  Click me
+</a>
+```
+
+### Why 44px?
+Apple's Human Interface Guidelines and WCAG 2.1 Success Criterion 2.5.5 (Target Size) recommend minimum 44x44 CSS pixels for touch targets. This ensures users can reliably tap without accidental activation.
 
 ---
 

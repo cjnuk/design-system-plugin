@@ -13,9 +13,10 @@
 2. [Error States](#error-states)
 3. [Success States](#success-states)
 4. [Animation Timing](#animation-timing)
-5. [Micro-interactions](#micro-interactions)
-6. [Keyboard Interactions](#keyboard-interactions)
-7. [Complete Examples](#complete-examples)
+5. [Animation Performance](#animation-performance)
+6. [Micro-interactions](#micro-interactions)
+7. [Keyboard Interactions](#keyboard-interactions)
+8. [Complete Examples](#complete-examples)
 
 ---
 
@@ -117,6 +118,40 @@ export function DataLoader() {
   );
 }
 ```
+
+### Loading Indicator Timing
+
+**Rule:** Delay loading indicators by 150-300ms to prevent flicker on fast operations.
+
+```typescript
+const LOADING_DELAY_MS = 200;
+
+function useDelayedLoading(isLoading: boolean) {
+  const [showLoading, setShowLoading] = useState(false);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (isLoading) {
+      timeout = setTimeout(() => setShowLoading(true), LOADING_DELAY_MS);
+    } else {
+      setShowLoading(false);
+    }
+    return () => clearTimeout(timeout);
+  }, [isLoading]);
+
+  return showLoading;
+}
+```
+
+#### Timing Thresholds
+
+| Response Time | Behavior |
+|---------------|----------|
+| < 150ms | No indicator (operation feels instant) |
+| 150-300ms | Show indicator after delay |
+| > 1000ms | Show progress bar or skeleton |
+
+**Why?** Showing a loading spinner for operations that complete in 50ms creates visual noise and makes the UI feel slower than it is.
 
 ### Best Practices for Loading States
 
@@ -460,6 +495,60 @@ export function ScaleIn({ children }) {
     </div>
   );
 }
+```
+
+---
+
+## ANIMATION PERFORMANCE
+
+### GPU-Accelerated Properties (Preferred)
+
+These properties are composited by the GPU and don't trigger layout recalculation:
+- `transform` (translate, scale, rotate)
+- `opacity`
+
+### Properties to Avoid Animating
+
+These trigger expensive layout or paint operations:
+- `width`, `height` (triggers layout)
+- `margin`, `padding` (triggers layout)
+- `top`, `left`, `right`, `bottom` (triggers layout)
+- `box-shadow` (triggers paint)
+
+### Implementation Examples
+
+```css
+/* GOOD: GPU-accelerated */
+.animate-slide {
+  transform: translateX(0);
+  transition: transform 200ms ease-out;
+}
+.animate-slide.open {
+  transform: translateX(-100%);
+}
+
+/* AVOID: Layout-triggering */
+.animate-slide-bad {
+  left: 0;
+  transition: left 200ms ease-out;
+}
+.animate-slide-bad.open {
+  left: -100%;
+}
+```
+
+### CSS-First Animation
+
+Prefer CSS transitions over JavaScript animation libraries for simple state changes:
+
+```tsx
+// GOOD: CSS handles the animation
+<div className={`transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+  Content
+</div>
+
+// AVOID: JavaScript animation for simple fade
+// (only use JS animation for complex choreography)
 ```
 
 ---

@@ -139,6 +139,25 @@ surface-border-strong:  slate-600
 
 **LLM usage rule:** Prefer `surface-*` tokens over raw colors in UI output. Swap themes by changing the mapping above, not the component classes.
 
+---
+
+## COLOR SCALE USAGE GUIDE (Geist Pattern)
+
+Each color scale has 10 steps (50-900) with semantic purposes:
+
+| Steps | Purpose | Examples |
+|-------|---------|----------|
+| 50-200 | Backgrounds | Subtle backgrounds, hover states, disabled states |
+| 300-400 | Borders | Dividers, input borders, separators |
+| 600-900 | Text | Body text, headings, high-contrast elements |
+
+#### Application Examples
+- `blue-50` to `blue-200`: Use for tinted backgrounds, subtle highlights
+- `blue-300` to `blue-400`: Use for borders, focus rings; `blue-500` is reserved for primary actions
+- `blue-600` to `blue-900`: Use for text on light backgrounds
+
+**LLM usage rule:** When selecting a color, first determine the purpose (background, border, or text), then select from the appropriate range.
+
 ### Implementation in Tailwind
 
 ```typescript
@@ -391,6 +410,212 @@ inner:     inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)
 
 <!-- Inset shadow (etchings, separations) -->
 <input class="shadow-inner border rounded px-3 py-2" />
+```
+
+---
+
+## ELEVATION SYSTEM
+
+Elevation creates visual hierarchy through shadows and z-index. This system distinguishes between in-page surfaces and floating overlays.
+
+### Surface Elevation (In-page elements)
+
+| Level | Shadow | Use Case |
+|-------|--------|----------|
+| base | none | Default page surface |
+| raised | shadow-sm | Cards, panels |
+| medium | shadow-md | Dropdown menus |
+| high | shadow-lg | Modal dialogs |
+
+### Floating Elevation (Overlay elements)
+
+| Level | Shadow | Use Case |
+|-------|--------|----------|
+| tooltip | shadow-md + ring | Tooltips, popovers |
+| menu | shadow-lg | Context menus, dropdowns |
+| modal | shadow-xl | Dialogs, sheets |
+| fullscreen | shadow-2xl | Full-screen overlays |
+
+### Z-Index Mapping
+
+| Elevation | z-index | Purpose |
+|-----------|---------|---------|
+| base | 0 | Default content |
+| raised | 10 | Base interactive elements |
+| floating | 30 | Dropdowns, tooltips, popovers |
+| modal | 40 | Modals, dialogs |
+| toast | 50 | Sticky headers, floating actions |
+
+**LLM usage rule:** Always pair shadow tokens with appropriate z-index. A modal should use both `shadow-xl` AND `z-40`.
+
+**See also:** [Z-INDEX TOKENS](#z-index-tokens) for the complete z-index specification and usage examples.
+
+---
+
+## WIDE GAMUT COLORS (P3)
+
+Modern displays (particularly Apple devices) support Display P3 color space, which offers significantly more vibrant colors than traditional sRGB. This section documents how to leverage P3 while maintaining backward compatibility.
+
+### What is Display P3?
+
+Display P3 extends the sRGB color gamut, allowing approximately 50% more colors. This is especially noticeable for:
+- Brand colors requiring maximum vibrancy
+- Gradients with smoother color transitions
+- Accent colors that need to stand out
+- High-saturation UI elements
+
+### CSS @supports Pattern
+
+Always provide sRGB fallback first, then P3 in a `@supports` block:
+
+```css
+:root {
+  /* sRGB baseline (universal support) */
+  --primary-500: #3b82f6;
+  --primary-600: #2563eb;
+  --accent-500: #f59e0b;
+  --success-500: #22c55e;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  :root {
+    /* Display P3 enhanced colors */
+    --primary-500: color(display-p3 0.231 0.510 0.965);
+    --primary-600: color(display-p3 0.146 0.388 0.933);
+    --accent-500: color(display-p3 0.961 0.619 0.043);
+    --success-500: color(display-p3 0.133 0.773 0.361);
+  }
+}
+```
+
+### When to Use P3
+
+| Use Case | Rationale | Impact |
+|----------|-----------|--------|
+| Brand colors | Maximum brand recognition on capable displays | High |
+| Gradients | Smoother transitions, reduced banding | Medium |
+| Accent colors | More visually striking UI elements | Medium |
+| Secondary colors | Minor enhancement, not critical | Low |
+| Grays/neutrals | Minimal visual difference | None |
+
+### Implementation Strategy
+
+#### Tailwind Integration
+
+```typescript
+// tailwind.config.ts
+import colors from 'tailwindcss/colors'
+
+export default {
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          // sRGB (default fallback)
+          50: '#eff6ff',
+          500: '#3b82f6',
+          600: '#2563eb',
+          900: '#1e3a8a',
+
+          // P3 variants (optional, for reference)
+          // 500p3: 'color(display-p3 0.231 0.510 0.965)',
+        },
+      },
+    },
+  },
+}
+```
+
+#### CSS Custom Properties (Preferred)
+
+```css
+/* Define in your CSS root */
+:root {
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  :root {
+    --primary: color(display-p3 0.231 0.510 0.965);
+    --primary-dark: color(display-p3 0.146 0.388 0.933);
+  }
+}
+
+/* Use in components */
+button {
+  background-color: var(--primary);
+}
+```
+
+### Gradient Example
+
+```css
+/* sRGB gradient (fallback) */
+.gradient-hero {
+  background: linear-gradient(
+    135deg,
+    #3b82f6 0%,
+    #ec4899 100%
+  );
+}
+
+/* Enhanced P3 gradient */
+@supports (color: color(display-p3 1 1 1)) {
+  .gradient-hero {
+    background: linear-gradient(
+      135deg,
+      color(display-p3 0.231 0.510 0.965) 0%,
+      color(display-p3 0.925 0.286 0.604) 100%
+    );
+  }
+}
+```
+
+### Converting sRGB to P3
+
+Use tools like:
+- [Color Space Converter](https://colorspacious.readthedocs.io/)
+- [Web Color Tools](https://www.colorhexa.com/)
+- [Adobe Color](https://color.adobe.com/) (export as CSS)
+
+**Conversion example:**
+```
+sRGB #3b82f6 (rgb 59, 130, 246)
+→ Display P3 color(display-p3 0.231 0.510 0.965)
+```
+
+### Browser Support
+
+| Browser | Display P3 Support |
+|---------|-------------------|
+| Chrome/Edge 77+ | Yes |
+| Firefox 96+ | Yes |
+| Safari 15+ | Yes |
+| iOS Safari 15+ | Yes |
+| Android Chrome | Yes |
+
+Use `@supports` to safely implement P3 without worrying about older browsers; they'll use the sRGB fallback.
+
+### Best Practices
+
+1. **Always provide sRGB fallback:** Use `@supports` for safe P3 enhancement
+2. **Test on real devices:** P3 rendering varies slightly between Apple and Android devices
+3. **Don't overuse:** Reserve P3 for brand colors and high-impact accents
+4. **Maintain consistency:** Ensure P3 variants are slightly more vibrant, not drastically different
+5. **Document:** Add comments when using P3 so future maintainers understand the intent
+
+### Verification
+
+```typescript
+// Test P3 support in JavaScript
+const isP3Supported = CSS.supports('color', 'color(display-p3 1 1 1)')
+console.log('Display P3 supported:', isP3Supported)
+
+// Use in conditional styling
+if (isP3Supported) {
+  // Apply P3-optimized styles
+}
 ```
 
 ---

@@ -1,0 +1,22 @@
+project:
+  name: "MyApp"
+  type: "application"                     # application | marketing | hybrid
+
+stack:
+  framework: "next"                       # next | remix | vite
+  ui_library: "shadcn"                    # shadcn | tailwind-ui | both
+  state_management: "jotai"               # jotai | zustand | none
+  testing:
+    unit: "vitest"                        # vitest | jest
+    e2e: "playwright"                     # playwright | cypress
+
+customizations: []                        # e.g., ["custom-auth-flow", "multi-tenant"]
+
+# Components already installed/configured
+components:
+  installed:
+    - button
+    - card
+    - dialog
+    - form
+  custom: []

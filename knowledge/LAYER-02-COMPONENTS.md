@@ -35,6 +35,40 @@
 - **ErrorMessage** — Validation error display
 - **FormGroup** — Related fields grouping
 
+#### Form Input Rules
+
+Essential rules for usable, accessible forms:
+
+1. **Never disable paste** on any input field
+2. **16px minimum font size** on mobile (prevents iOS zoom on focus)
+3. **Label every control** - no placeholder-only inputs
+4. **Autocomplete attributes** - use `autocomplete="email"`, `autocomplete="current-password"`, etc.
+5. **Input modes** - use `inputMode="numeric"` for number-only fields on mobile
+
+```tsx
+// CORRECT: Mobile-friendly input with all best practices
+<div>
+  <label htmlFor="email">Email address</label>
+  <input
+    id="email"
+    type="email"
+    autoComplete="email"
+    inputMode="email"
+    className="text-base md:text-sm" // 16px on mobile, 14px on desktop
+    placeholder="you@example.com"
+  />
+</div>
+
+// INCORRECT: Placeholder-only, small text, no autocomplete
+<input
+  type="email"
+  placeholder="Email"
+  className="text-xs"
+/>
+```
+
+**See also:** [LAYER-08-ACCESSIBILITY.md](./LAYER-08-ACCESSIBILITY.md) for touch target requirements and comprehensive form accessibility guidelines.
+
 #### Dialogs & Overlays
 - **Dialog** — Modal dialog
 - **AlertDialog** — Alert/confirmation dialog

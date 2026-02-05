@@ -1,9 +1,14 @@
 {
   "name": "design-system",
-  "version": "1.0.0",
-  "description": "Design system for building consistent, accessible UI components with shadcn/ui, Tailwind CSS, and semantic tokens",
-  "author": "Design System Team",
-  "repository": "https://github.com/example/design-system-plugin",
+  "version": "3.0.0",
+  "description": "AI-powered design system with semantic tokens, components, and patterns for Tailwind + shadcn/ui applications",
+  "author": {
+    "name": "Chris Norris",
+    "url": "https://github.com/cjnuk"
+  },
+  "repository": "https://github.com/cjnuk/design-system-plugin",
+  "license": "MIT",
+  "keywords": ["design-system", "tailwind", "shadcn", "components", "accessibility"],
   "skills": {
     "auto_discover": true,
     "dir": "skills"
