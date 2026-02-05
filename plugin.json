@@ -8,17 +8,5 @@
   },
   "repository": "https://github.com/cjnuk/design-system-plugin",
   "license": "MIT",
-  "keywords": ["design-system", "tailwind", "shadcn", "components", "accessibility"],
-  "skills": {
-    "auto_discover": true,
-    "dir": "skills"
-  },
-  "agents": {
-    "auto_discover": true,
-    "dir": "agents"
-  },
-  "hooks": {
-    "auto_discover": true,
-    "dir": "hooks"
-  }
+  "keywords": ["design-system", "tailwind", "shadcn", "components", "accessibility"]
 }
