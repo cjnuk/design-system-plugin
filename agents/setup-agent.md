@@ -19,12 +19,12 @@ Initialize Next.js or React projects with design system tokens, dependencies, sh
 ## Knowledge Loading Protocol
 
 **On invocation, use Read tool to load:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-00-STRATEGIC-DECISIONS.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-00-STRATEGIC-DECISIONS.md`
 
 **Conditionally load if needed:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/MARKETING-DOMAIN/10a-SETUP.md` - for marketing sites
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/APPLICATION-DOMAIN/10b-SETUP.md` - for applications
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-01-DESIGN-TOKENS.md` - for token configuration
+- `${CLAUDE_PLUGIN_ROOT}/system/MARKETING-DOMAIN/10a-SETUP.md` - for marketing sites
+- `${CLAUDE_PLUGIN_ROOT}/system/APPLICATION-DOMAIN/10b-SETUP.md` - for applications
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-01-DESIGN-TOKENS.md` - for token configuration
 
 ## Mandatory Rules
 

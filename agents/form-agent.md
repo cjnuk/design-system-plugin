@@ -19,12 +19,12 @@ Create form fields with proper validation using react-hook-form, Zod schema, and
 ## Knowledge Loading Protocol
 
 **On invocation, use Read tool to load:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/PROMPTS/02-FORM-FIELD.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/APPLICATION-DOMAIN/12b-IMPLEMENTATION.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/PROMPTS/02-FORM-FIELD.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/APPLICATION-DOMAIN/12b-IMPLEMENTATION.md`
 
 **Conditionally load if needed:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-02-COMPONENTS.md` - for input component patterns
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-08-ACCESSIBILITY.md` - for complex form accessibility
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-02-COMPONENTS.md` - for input component patterns
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-08-ACCESSIBILITY.md` - for complex form accessibility
 
 ## Mandatory Rules
 

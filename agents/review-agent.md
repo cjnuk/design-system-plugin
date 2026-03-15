@@ -19,12 +19,12 @@ Review UI code for compliance with design system standards, checking semantic to
 ## Knowledge Loading Protocol
 
 **On invocation, use Read tool to load:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/PROMPTS/05-CODE-REVIEW.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LLM-AGENT-GUIDE.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/PROMPTS/05-CODE-REVIEW.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LLM-AGENT-GUIDE.md`
 
 **Conditionally load if needed:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-01-DESIGN-TOKENS.md` - for token validation
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-08-ACCESSIBILITY.md` - for a11y audit
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-01-DESIGN-TOKENS.md` - for token validation
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-08-ACCESSIBILITY.md` - for a11y audit
 
 ## Mandatory Rules
 

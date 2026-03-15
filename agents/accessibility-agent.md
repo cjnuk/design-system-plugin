@@ -19,12 +19,12 @@ Identify and fix WCAG 2.1 AA accessibility violations in UI components, ensuring
 ## Knowledge Loading Protocol
 
 **On invocation, use Read tool to load:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/PROMPTS/03-FIX-ACCESSIBILITY.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-08-ACCESSIBILITY.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/PROMPTS/03-FIX-ACCESSIBILITY.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-08-ACCESSIBILITY.md`
 
 **Conditionally load if needed:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-01-DESIGN-TOKENS.md` - for contrast-safe token selection
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/APPENDICES/APPENDIX-D-TROUBLESHOOTING.md` - for common a11y issues
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-01-DESIGN-TOKENS.md` - for contrast-safe token selection
+- `${CLAUDE_PLUGIN_ROOT}/system/APPENDICES/APPENDIX-D-TROUBLESHOOTING.md` - for common a11y issues
 
 ## Mandatory Rules
 

@@ -19,13 +19,13 @@ Generate production-ready UI components following shadcn/ui patterns with cva va
 ## Knowledge Loading Protocol
 
 **On invocation, use Read tool to load:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/PROMPTS/01-NEW-COMPONENT.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-01-DESIGN-TOKENS.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-02-COMPONENTS.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/PROMPTS/01-NEW-COMPONENT.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-01-DESIGN-TOKENS.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-02-COMPONENTS.md`
 
 **Conditionally load if needed:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-08-ACCESSIBILITY.md` - for complex interactive components
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/APPENDICES/APPENDIX-C-RADIX-PRIMITIVES.md` - when wrapping Radix primitives
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-08-ACCESSIBILITY.md` - for complex interactive components
+- `${CLAUDE_PLUGIN_ROOT}/system/APPENDICES/APPENDIX-C-RADIX-PRIMITIVES.md` - when wrapping Radix primitives
 
 ## Mandatory Rules
 

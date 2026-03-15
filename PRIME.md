@@ -67,7 +67,7 @@ These principles are **non-negotiable**. Violations indicate incorrect implement
 │   └── ds-*/SKILL.md           # Skill definitions
 ├── agents/                     # 8 execution agents
 │   └── *-agent.md              # Agent logic
-├── knowledge/                  # Design system docs
+├── system/                  # Design system docs
 │   ├── LAYER-*.md              # Core layers (00-10)
 │   ├── PROMPTS/                # Task templates
 │   ├── APPENDICES/             # Reference guides
@@ -213,11 +213,11 @@ Checks:
 
 | File | Purpose |
 |------|---------|
-| `/Users/chrisnorris/projects/design-system-plugin/knowledge/00-MASTER.md` | Entry point |
-| `/Users/chrisnorris/projects/design-system-plugin/knowledge/LLM-AGENT-GUIDE.md` | Agent routing |
-| `/Users/chrisnorris/projects/design-system-plugin/knowledge/LAYER-01-DESIGN-TOKENS.md` | Token specs |
-| `/Users/chrisnorris/projects/design-system-plugin/knowledge/LAYER-02-COMPONENTS.md` | Component specs |
-| `/Users/chrisnorris/projects/design-system-plugin/knowledge/LAYER-08-ACCESSIBILITY.md` | WCAG guide |
+| `/Users/chrisnorris/projects/design-system-plugin/system/00-MASTER.md` | Entry point |
+| `/Users/chrisnorris/projects/design-system-plugin/system/LLM-AGENT-GUIDE.md` | Agent routing |
+| `/Users/chrisnorris/projects/design-system-plugin/system/LAYER-01-DESIGN-TOKENS.md` | Token specs |
+| `/Users/chrisnorris/projects/design-system-plugin/system/LAYER-02-COMPONENTS.md` | Component specs |
+| `/Users/chrisnorris/projects/design-system-plugin/system/LAYER-08-ACCESSIBILITY.md` | WCAG guide |
 
 ---
 
@@ -298,7 +298,7 @@ cd ~/.claude/plugins/design-system && git pull
 ### 10.1 Read Order
 
 1. `PRIME.md` (this document)
-2. `knowledge/LLM-AGENT-GUIDE.md` for task routing
+2. `system/LLM-AGENT-GUIDE.md` for task routing
 3. Task-specific LAYER files as needed
 
 ### 10.2 Task-Specific Loading

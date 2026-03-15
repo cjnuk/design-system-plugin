@@ -15,8 +15,8 @@ Analyze user requests and route to the appropriate specialized design system age
 ## Knowledge Loading Protocol
 
 **On invocation, use Read tool to load:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LLM-AGENT-GUIDE.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/00-MASTER.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LLM-AGENT-GUIDE.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/00-MASTER.md`
 
 ## Routing Logic
 

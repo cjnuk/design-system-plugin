@@ -85,7 +85,7 @@ design-system-plugin/
 ├── hooks/
 │   └── validate-output.md                # PostToolUse validation
 │
-├── knowledge/                            # Design system documentation
+├── system/                            # Design system documentation
 │   ├── 00-MASTER.md                      # System overview
 │   ├── LLM-AGENT-GUIDE.md                # Agent routing paths
 │   ├── _FILE-MANIFEST.md                 # Complete file index
@@ -200,11 +200,11 @@ Initialize a new project with design system configuration by creating `.claude/d
 
 **On invocation, use Read tool to load:**
 - `${CLAUDE_PLUGIN_ROOT}/templates/project-config.yaml`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-00-STRATEGIC-DECISIONS.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-00-STRATEGIC-DECISIONS.md`
 
 **Conditionally load based on project type:**
 - `${CLAUDE_PLUGIN_ROOT}/templates/APPLICATION-DOMAIN/` - for applications
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/MARKETING-DOMAIN/` - for marketing sites
+- `${CLAUDE_PLUGIN_ROOT}/system/MARKETING-DOMAIN/` - for marketing sites
 
 ## Execution
 
@@ -238,9 +238,9 @@ Analyze existing codebase for design system compliance, identifying token violat
 ## Knowledge Loading Protocol
 
 **On invocation, use Read tool to load:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-01-DESIGN-TOKENS.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-02-COMPONENTS.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-08-ACCESSIBILITY.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-01-DESIGN-TOKENS.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-02-COMPONENTS.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-08-ACCESSIBILITY.md`
 
 ## Execution
 
@@ -351,7 +351,7 @@ Generate compound components following React patterns: Context for state sharing
 
 **On invocation, use Read tool to load:**
 - `${CLAUDE_PLUGIN_ROOT}/skills/ds-compound-component/SKILL.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/APPENDICES/APPENDIX-C-RADIX-PRIMITIVES.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/APPENDICES/APPENDIX-C-RADIX-PRIMITIVES.md`
 
 **For advanced patterns, additionally load:**
 - `${CLAUDE_PLUGIN_ROOT}/skills/ds-compound-component/reference.md`
@@ -390,7 +390,7 @@ Generate virtualized list and table implementations using TanStack Virtual for p
 
 **On invocation, use Read tool to load:**
 - `${CLAUDE_PLUGIN_ROOT}/skills/ds-virtualize/SKILL.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-07-INTERACTION-PATTERNS.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-07-INTERACTION-PATTERNS.md`
 
 ## Execution
 
@@ -426,7 +426,7 @@ Generate animation code following GPU-acceleration best practices and WCAG reduc
 
 **On invocation, use Read tool to load:**
 - `${CLAUDE_PLUGIN_ROOT}/skills/ds-animation/SKILL.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-07c-MOTION-PATTERNS.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-07c-MOTION-PATTERNS.md`
 
 ## Execution
 
@@ -481,12 +481,12 @@ Set up ESLint 9 (flat config), Prettier with Tailwind plugin, and VS Code settin
 
 ### 4.1 Merge Strategy
 
-The `knowledge/` directory consolidates v1.0.0 knowledge files with v2.2.0 system files:
+The `system/` directory consolidates v1.0.0 knowledge files with v2.2.0 system files:
 
 | Source | Destination | Notes |
 |--------|-------------|-------|
-| v1.0.0 `knowledge/` | `knowledge/` | Base knowledge files |
-| v2.2.0 `system/` | `knowledge/` | Merged (system was symlinked) |
+| v1.0.0 `system/` | `system/` | Base knowledge files |
+| v2.2.0 `system/` | `system/` | Merged (system was symlinked) |
 | v2.2.0 `skills/*/SKILL.md` | `skills/*/SKILL.md` | Complete skill docs |
 | v2.2.0 `skills/*/reference.md` | `skills/*/reference.md` | Advanced patterns |
 | v2.2.0 `templates/` | `templates/` | Project scaffolding |
@@ -517,7 +517,7 @@ Skills that support project customization follow this resolution:
 
 1. **Project patterns first:** `.claude/design-system/APPLICATION-DOMAIN/*.md`
 2. **Skill reference:** `${CLAUDE_PLUGIN_ROOT}/skills/<skill>/reference.md`
-3. **Core knowledge:** `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-*.md`
+3. **Core knowledge:** `${CLAUDE_PLUGIN_ROOT}/system/LAYER-*.md`
 
 ---
 
@@ -672,12 +672,12 @@ touch agents/lint-agent.md
 ### Phase 5: Merge Knowledge
 
 ```bash
-# 6. Ensure knowledge/ has all required files
-# Most already exist in v1.0.0 knowledge/
+# 6. Ensure system/ has all required files
+# Most already exist in v1.0.0 system/
 # Copy any missing from v2.2.0 system/
 
 # Check for LAYER-07c-MOTION-PATTERNS.md
-cp ../design-systems/design-system-plugin/system/LAYER-07c-MOTION-PATTERNS.md knowledge/ 2>/dev/null || echo "Check if exists"
+cp ../design-systems/design-system-plugin/system/LAYER-07c-MOTION-PATTERNS.md system/ 2>/dev/null || echo "Check if exists"
 ```
 
 ### Phase 6: Add Templates and Configs
@@ -816,7 +816,7 @@ After migration, verify:
 - [ ] All 16 skills have SKILL.md files in `skills/` directories
 - [ ] All 15 agents exist in `agents/` directory
 - [ ] `validate-output.md` hook exists in `hooks/`
-- [ ] `knowledge/` contains all LAYER and APPENDIX files
+- [ ] `system/` contains all LAYER and APPENDIX files
 - [ ] `templates/` contains project scaffolding files
 - [ ] `configs/` contains ESLint/Prettier templates
 - [ ] Each skill's `invoke_agent` frontmatter points to correct agent

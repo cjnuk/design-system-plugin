@@ -113,7 +113,7 @@ design-system-plugin/
 ├── hooks/
 │   └── validate-output.md       # PostToolUse validation
 │
-├── knowledge/                   # Design system documentation
+├── system/                   # Design system documentation
 │   ├── 00-MASTER.md             # System overview
 │   ├── LLM-AGENT-GUIDE.md       # Task routing paths
 │   ├── LAYER-01-DESIGN-TOKENS.md

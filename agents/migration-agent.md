@@ -19,12 +19,12 @@ Convert components from Material UI, Chakra UI, or Bootstrap to shadcn/ui with s
 ## Knowledge Loading Protocol
 
 **On invocation, use Read tool to load:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/PROMPTS/06-MIGRATION.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/APPENDICES/APPENDIX-E-MIGRATION-PATHS.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/PROMPTS/06-MIGRATION.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/APPENDICES/APPENDIX-E-MIGRATION-PATHS.md`
 
 **Conditionally load if needed:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-01-DESIGN-TOKENS.md` - for token mapping
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-02-COMPONENTS.md` - for component patterns
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-01-DESIGN-TOKENS.md` - for token mapping
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-02-COMPONENTS.md` - for component patterns
 
 ## Mandatory Rules
 

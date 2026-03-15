@@ -19,11 +19,11 @@ Implement dark mode with CSS custom properties, manage design tokens, and ensure
 ## Knowledge Loading Protocol
 
 **On invocation, use Read tool to load:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/PROMPTS/04-DARK-MODE.md`
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/LAYER-01-DESIGN-TOKENS.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/PROMPTS/04-DARK-MODE.md`
+- `${CLAUDE_PLUGIN_ROOT}/system/LAYER-01-DESIGN-TOKENS.md`
 
 **Conditionally load if needed:**
-- `${CLAUDE_PLUGIN_ROOT}/knowledge/APPLICATION-DOMAIN/10b-SETUP.md` - for project configuration
+- `${CLAUDE_PLUGIN_ROOT}/system/APPLICATION-DOMAIN/10b-SETUP.md` - for project configuration
 
 ## Mandatory Rules
 
