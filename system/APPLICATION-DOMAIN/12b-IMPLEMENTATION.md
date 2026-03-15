@@ -309,6 +309,273 @@ export const useSetSidebarOpen = () => useSetAtom(sidebarOpenAtom)
 
 ---
 
+## MULTI-STEP FORMS (WIZARD)
+
+### State Management
+
+```typescript
+// src/atoms/wizard.ts
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
+
+interface WizardState<T> {
+  currentStep: number
+  totalSteps: number
+  data: Partial<T>
+  completedSteps: Set<number>
+}
+
+function createWizardAtom<T>(totalSteps: number) {
+  return atom<WizardState<T>>({
+    currentStep: 0,
+    totalSteps,
+    data: {},
+    completedSteps: new Set(),
+  })
+}
+
+// Example: 3-step signup wizard
+export const signupWizardAtom = createWizardAtom<{
+  email: string
+  password: string
+  name: string
+  company: string
+  plan: 'free' | 'pro' | 'enterprise'
+}>(3)
+```
+
+### Wizard Container Component
+
+```typescript
+// src/components/features/wizard.tsx
+import { useAtom } from 'jotai'
+import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
+import { cn } from '@/lib/utils'
+
+interface WizardProps<T> {
+  atom: ReturnType<typeof atom<WizardState<T>>>
+  steps: Array<{
+    title: string
+    description?: string
+    component: React.ComponentType<{
+      data: Partial<T>
+      onUpdate: (data: Partial<T>) => void
+    }>
+    validate?: (data: Partial<T>) => boolean
+  }>
+  onComplete: (data: T) => void
+}
+
+export function Wizard<T>({ atom: wizardAtom, steps, onComplete }: WizardProps<T>) {
+  const [state, setState] = useAtom(wizardAtom)
+  const { currentStep, data, completedSteps } = state
+
+  const CurrentStepComponent = steps[currentStep].component
+  const isLastStep = currentStep === steps.length - 1
+  const canProceed = steps[currentStep].validate?.(data) ?? true
+
+  const handleNext = () => {
+    if (isLastStep) {
+      onComplete(data as T)
+    } else {
+      setState((prev) => ({
+        ...prev,
+        currentStep: prev.currentStep + 1,
+        completedSteps: new Set([...prev.completedSteps, prev.currentStep]),
+      }))
+    }
+  }
+
+  const handleBack = () => {
+    setState((prev) => ({
+      ...prev,
+      currentStep: Math.max(0, prev.currentStep - 1),
+    }))
+  }
+
+  const handleUpdate = (newData: Partial<T>) => {
+    setState((prev) => ({
+      ...prev,
+      data: { ...prev.data, ...newData },
+    }))
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Progress indicator */}
+      <div className="space-y-2">
+        <Progress value={((currentStep + 1) / steps.length) * 100} />
+        <div className="flex justify-between">
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              className={cn(
+                'text-sm',
+                index <= currentStep ? 'text-primary' : 'text-muted-foreground'
+              )}
+            >
+              {step.title}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Step content */}
+      <div className="min-h-[300px]">
+        <h2 className="text-xl font-semibold mb-2">{steps[currentStep].title}</h2>
+        {steps[currentStep].description && (
+          <p className="text-muted-foreground mb-6">{steps[currentStep].description}</p>
+        )}
+        <CurrentStepComponent data={data} onUpdate={handleUpdate} />
+      </div>
+
+      {/* Navigation */}
+      <div className="flex justify-between">
+        <Button
+          variant="outline"
+          onClick={handleBack}
+          disabled={currentStep === 0}
+        >
+          Back
+        </Button>
+        <Button onClick={handleNext} disabled={!canProceed}>
+          {isLastStep ? 'Complete' : 'Next'}
+        </Button>
+      </div>
+    </div>
+  )
+}
+```
+
+### Step Components Example
+
+```typescript
+// src/components/features/signup-wizard/step-account.tsx
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+
+interface AccountData {
+  email: string
+  password: string
+}
+
+export function StepAccount({
+  data,
+  onUpdate,
+}: {
+  data: Partial<AccountData>
+  onUpdate: (data: Partial<AccountData>) => void
+}) {
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          value={data.email ?? ''}
+          onChange={(e) => onUpdate({ email: e.target.value })}
+          placeholder="you@example.com"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          type="password"
+          value={data.password ?? ''}
+          onChange={(e) => onUpdate({ password: e.target.value })}
+          placeholder="At least 8 characters"
+        />
+      </div>
+    </div>
+  )
+}
+```
+
+### Validation Strategy
+
+```typescript
+// Validate per-step before allowing navigation
+const steps = [
+  {
+    title: 'Account',
+    component: StepAccount,
+    validate: (data) => {
+      const email = data.email ?? ''
+      const password = data.password ?? ''
+      return email.includes('@') && password.length >= 8
+    },
+  },
+  {
+    title: 'Profile',
+    component: StepProfile,
+    validate: (data) => (data.name ?? '').length > 0,
+  },
+  {
+    title: 'Plan',
+    component: StepPlan,
+    validate: (data) => data.plan !== undefined,
+  },
+]
+```
+
+### Usage
+
+```typescript
+// src/app/signup/page.tsx
+import { Wizard } from '@/components/features/wizard'
+import { signupWizardAtom } from '@/atoms/wizard'
+import { StepAccount } from '@/components/features/signup-wizard/step-account'
+import { StepProfile } from '@/components/features/signup-wizard/step-profile'
+import { StepPlan } from '@/components/features/signup-wizard/step-plan'
+
+type SignupData = {
+  email: string
+  password: string
+  name: string
+  company: string
+  plan: 'free' | 'pro' | 'enterprise'
+}
+
+const steps = [
+  {
+    title: 'Account',
+    component: StepAccount,
+    validate: (data: Partial<SignupData>) =>
+      Boolean(data.email?.includes('@') && (data.password?.length ?? 0) >= 8)
+  },
+  {
+    title: 'Profile',
+    component: StepProfile,
+    validate: (data: Partial<SignupData>) => (data.name?.length ?? 0) > 0
+  },
+  {
+    title: 'Plan',
+    component: StepPlan,
+    validate: (data: Partial<SignupData>) => data.plan !== undefined
+  },
+]
+
+export default function SignupPage() {
+  const handleComplete = async (data: SignupData) => {
+    await fetch('/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+  }
+
+  return (
+    <div className="max-w-lg mx-auto p-8">
+      <Wizard atom={signupWizardAtom} steps={steps} onComplete={handleComplete} />
+    </div>
+  )
+}
+```
+
+---
+
 ## FILE STRUCTURE CONVENTION
 
 ```

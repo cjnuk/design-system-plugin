@@ -60,6 +60,7 @@ last_updated: "2026-01-18"
 - **PROMPTS/04-DARK-MODE.md** — Implement dark mode
 - **PROMPTS/05-CODE-REVIEW.md** — Code review checklist
 - **PROMPTS/06-MIGRATION.md** — Migrate from other frameworks
+- **PROMPTS/07-GENERATE-STACK-CONSTRAINTS.md** — Generate stack constraints for frontend-design
 
 ---
 
