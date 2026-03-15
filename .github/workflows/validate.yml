@@ -1,0 +1,177 @@
+name: Plugin Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-markdown:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint Markdown files
+        uses: DavidAnson/markdownlint-cli2-action@v18
+        with:
+          globs: '**/*.md'
+          config: '.markdownlint.json'
+
+  check-links:
+    name: Check Links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check internal links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --verbose
+            --no-progress
+            --exclude-path node_modules
+            --exclude 'https?://localhost'
+            --exclude 'https?://127\.0\.0\.1'
+            '**/*.md'
+          fail: true
+
+  validate-plugin-json:
+    name: Validate plugin.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON syntax
+        run: |
+          echo "Checking plugin.json is valid JSON..."
+          python3 -m json.tool plugin.json > /dev/null
+          echo "plugin.json is valid JSON"
+
+      - name: Validate required fields
+        run: |
+          echo "Checking required fields in plugin.json..."
+          failed=0
+
+          for field in name version description author; do
+            value=$(python3 -c "
+          import json, sys
+          with open('plugin.json') as f:
+              data = json.load(f)
+          val = data.get('$field')
+          if val is None:
+              sys.exit(1)
+          print(val if isinstance(val, str) else str(val))
+          " 2>/dev/null)
+
+            if [ $? -ne 0 ]; then
+              echo "ERROR: Required field '$field' is missing from plugin.json"
+              failed=$((failed + 1))
+            else
+              echo "OK: '$field' = $value"
+            fi
+          done
+
+          if [ $failed -gt 0 ]; then
+            echo "FAIL: $failed required field(s) missing from plugin.json"
+            exit 1
+          fi
+          echo "All required fields present"
+
+      - name: Validate version consistency across docs
+        run: |
+          echo "Checking version consistency..."
+          plugin_version=$(python3 -c "import json; print(json.load(open('plugin.json'))['version'])")
+          echo "plugin.json version: $plugin_version"
+
+          failed=0
+          for doc in PUBLISHING.md QUICK-REFERENCE.md GETTING-STARTED.md; do
+            if [ ! -f "$doc" ]; then
+              echo "WARNING: $doc not found, skipping version check"
+              continue
+            fi
+
+            if grep -qF "$plugin_version" "$doc"; then
+              echo "OK: $doc references version $plugin_version"
+            else
+              echo "ERROR: $doc does not reference version $plugin_version"
+              failed=$((failed + 1))
+            fi
+          done
+
+          if [ $failed -gt 0 ]; then
+            echo "FAIL: $failed doc(s) have version mismatch with plugin.json ($plugin_version)"
+            exit 1
+          fi
+          echo "Version consistency check passed"
+
+  validate-skill-frontmatter:
+    name: Validate Skill Frontmatter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate SKILL.md frontmatter
+        run: |
+          echo "Checking SKILL.md frontmatter in skills/*/SKILL.md..."
+          failed=0
+          checked=0
+
+          for skill_file in skills/*/SKILL.md; do
+            if [ ! -f "$skill_file" ]; then
+              echo "WARNING: No SKILL.md files found matching skills/*/SKILL.md"
+              break
+            fi
+
+            checked=$((checked + 1))
+            file_failed=0
+
+            # Frontmatter must start with ---
+            first_line=$(head -n 1 "$skill_file")
+            if [ "$first_line" != "---" ]; then
+              echo "ERROR: $skill_file — missing opening '---' frontmatter delimiter"
+              failed=$((failed + 1))
+              continue
+            fi
+
+            # Extract frontmatter block (between first and second ---)
+            frontmatter=$(awk '/^---$/{if (found++) exit; next} found' "$skill_file")
+
+            # Check required field: skill
+            if echo "$frontmatter" | grep -qE '^skill:[[:space:]]*\S+'; then
+              skill_val=$(echo "$frontmatter" | grep -E '^skill:' | head -1 | sed 's/skill:[[:space:]]*//')
+              echo "OK: $skill_file — skill: $skill_val"
+            else
+              echo "ERROR: $skill_file — missing or empty 'skill' field"
+              file_failed=$((file_failed + 1))
+            fi
+
+            # Check required field: description
+            if echo "$frontmatter" | grep -qE '^description:[[:space:]]*\S+'; then
+              echo "OK: $skill_file — description present"
+            else
+              echo "ERROR: $skill_file — missing or empty 'description' field"
+              file_failed=$((file_failed + 1))
+            fi
+
+            # Check required field: triggers (must have at least one list item)
+            if echo "$frontmatter" | grep -qE '^triggers:' && echo "$frontmatter" | grep -qE '^\s+-\s+\S+'; then
+              trigger_count=$(echo "$frontmatter" | grep -cE '^\s+-\s+\S+')
+              echo "OK: $skill_file — triggers: $trigger_count item(s)"
+            else
+              echo "ERROR: $skill_file — missing 'triggers' field or no trigger items listed"
+              file_failed=$((file_failed + 1))
+            fi
+
+            if [ $file_failed -gt 0 ]; then
+              failed=$((failed + file_failed))
+            fi
+          done
+
+          echo "Checked $checked SKILL.md file(s)"
+
+          if [ $failed -gt 0 ]; then
+            echo "FAIL: $failed frontmatter error(s) found"
+            exit 1
+          fi
+          echo "All skill frontmatter valid"
