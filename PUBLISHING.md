@@ -11,13 +11,13 @@ Verify `plugin.json` contains all required fields:
 ```json
 {
   "name": "design-system",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "AI-powered design system with tokens, components, and patterns for Tailwind + shadcn/ui applications",
   "author": {
-    "name": "Your Name",
-    "url": "https://github.com/yourusername"
+    "name": "Chris Norris",
+    "url": "https://github.com/cjnuk"
   },
-  "repository": "https://github.com/yourusername/design-system-plugin",
+  "repository": "https://github.com/cjnuk/design-system-plugin",
   "license": "MIT",
   "keywords": ["design-system", "tailwind", "shadcn", "components", "accessibility"]
 }
@@ -93,10 +93,10 @@ Your plugin is available via a personal marketplace:
 
 ```bash
 # Users add your marketplace
-claude plugin marketplace add yourusername/claude-marketplace
+claude plugin marketplace add cjnuk/claude-marketplace
 
 # Users install plugin
-claude plugin install design-system-plugin@yourusername-marketplace
+claude plugin install design-system-plugin@cjnuk-marketplace
 ```
 
 **To update the marketplace:**
@@ -108,7 +108,7 @@ claude plugin install design-system-plugin@yourusername-marketplace
    {
      "plugins": [{
        "name": "design-system-plugin",
-       "version": "2.2.0",  // Update this
+       "version": "3.0.0",  // Update this
        "source": "./plugins/design-system-plugin"
      }]
    }
@@ -164,7 +164,7 @@ git commit -m "chore: bump version to X.Y.Z"
 ### 2. Create Git Tag
 
 ```bash
-git tag -a v2.2.0 -m "Release v2.2.0: Feature description"
+git tag -a v3.0.0 -m "Release v3.0.0: Feature description"
 git push origin main --tags
 ```
 
@@ -172,7 +172,7 @@ git push origin main --tags
 
 1. Go to GitHub → Releases → "Draft a new release"
 2. Choose the tag you just created
-3. Title: `v2.2.0`
+3. Title: `v3.0.0`
 4. Description: Copy from CHANGELOG.md
 5. Attach ZIP of plugin directory (optional)
 6. Publish release
@@ -183,7 +183,7 @@ git push origin main --tags
 cd claude-marketplace
 # Update marketplace.json version
 git add -A
-git commit -m "chore: update design-system-plugin to v2.2.0"
+git commit -m "chore: update design-system-plugin to v3.0.0"
 git push origin main
 ```
 
@@ -246,8 +246,8 @@ Follow semantic versioning:
 | Change Type | Version Bump | Example |
 |-------------|--------------|---------|
 | Breaking changes to skill APIs | MAJOR | 2.0.0 → 3.0.0 |
-| New skills, features, improvements | MINOR | 2.1.0 → 2.2.0 |
-| Bug fixes, documentation updates | PATCH | 2.2.0 → 2.2.1 |
+| New skills, features, improvements | MINOR | 3.0.0 → 3.1.0 |
+| Bug fixes, documentation updates | PATCH | 3.0.0 → 3.0.1 |
 
 **Breaking changes include:**
 - Renaming or removing skills
@@ -282,8 +282,8 @@ head -20 ~/.claude/plugins/design-system/skills/ds-init/SKILL.md
 
 ```bash
 # Remove and re-add marketplace
-claude plugin marketplace remove yourusername-marketplace
-claude plugin marketplace add yourusername/claude-marketplace
+claude plugin marketplace remove cjnuk-marketplace
+claude plugin marketplace add cjnuk/claude-marketplace
 ```
 
 ---

@@ -1,4 +1,4 @@
-# Quick Reference: Design System Plugin v2.2.0
+# Quick Reference: Design System Plugin v3.0.0
 
 ## Installation
 
@@ -201,7 +201,6 @@ A: Copy and customize `.claude/design-system/APPLICATION-DOMAIN/` files
 ## Key Docs
 
 - **README.md**: Full architecture documentation
-- **MIGRATION-GUIDE.md**: How v2.2.0 differs from v2.1.x
 - **RESTRUCTURING-SUMMARY.md**: Implementation details
 - **system/LAYER-*.md**: Core design system knowledge (13 files)
 
@@ -266,7 +265,7 @@ A: Copy and customize `.claude/design-system/APPLICATION-DOMAIN/` files
 
 ## Version
 
-- **Version**: 2.2.0
+- **Version**: 3.0.0
 - **Architecture**: ADR-001 Hybrid
 - **Release Date**: 2026-02-04
 - **Status**: Production Ready

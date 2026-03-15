@@ -394,7 +394,6 @@ Claude will guide you through migrating from MUI, Chakra, Bootstrap, or other fr
 
 - **README.md**: Full architecture and features documentation
 - **QUICK-REFERENCE.md**: Quick lookup for skills and commands
-- **MIGRATION-GUIDE.md**: Upgrading from previous plugin versions
 - **system/LAYER-00-STRATEGIC-DECISIONS.md**: Design system philosophy
 - **system/LAYER-01-DESIGN-TOKENS.md**: Complete token reference
 
@@ -408,4 +407,4 @@ For detailed information about any skill, run:
 
 ---
 
-**Version**: 2.2.0 | **Architecture**: Hybrid (ADR-001) | **Status**: Production Ready
+**Version**: 3.0.0 | **Architecture**: Hybrid (ADR-001) | **Status**: Production Ready
